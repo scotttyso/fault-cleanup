@@ -3,3 +3,5 @@ cisco:
   apics:
     - hostname: asgard-apic01.rich.ciscolabs.com
       username: admin
+    - hostname: wakanda-apic01.rich.ciscolabs.com
+      username: admin

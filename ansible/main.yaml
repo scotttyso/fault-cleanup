@@ -4,20 +4,6 @@
   gather_facts: false
   tasks:
 
-    - name: Fault Cleanup | Confirm the latest SDKs are installed
-      pip:
-        name:
-          - datetime
-          - distro
-          - netaddr
-          - purity_fb
-          - purestorage
-          - py-pure-client
-          - pycountry
-          - pytz
-          - urllib3
-        state: latest
-
     - name: Fault Cleanup | Load variables from custom file
       ansible.builtin.include_vars:
         dir: "{{ playbook_dir }}/vars"

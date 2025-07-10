@@ -1,19 +1,51 @@
 ---
-- name: Add a tenant using a JSON string
-  cisco.aci.aci_rest:
-    host: "{{ apic_hostname }}"
-    password: "{{ apic_password }}"
-    username: "{{ apic_username }}"
-    validate_certs: false
-    path: /api/node/mo/uni/fabric/ogmode.json
-    method: post
-    content:
-      {
-          "dbgOngoingAcMode": {
-              "attributes": {
-                  "dn": "uni/fabric/ogmode",
-                  "mode": "trail"
-              },
-              "children": []
-          }
-      }
+  - name: Cisco ACI Fault Cleanup | Running on Host
+    debug:
+      msg: "Running Cleanup on Host: {{ apic_hostname }}"
+
+  - name: Cisco ACI Fault Cleanup | Supress Atomic Counters
+    cisco.aci.aci_rest:
+      host: "{{ apic_hostname }}"
+      password: "{{ apic_password }}"
+      username: "{{ apic_username }}"
+      validate_certs: false
+      path: /api/node/mo/uni/fabric/ogmode.json
+      method: post
+      content:
+        {
+            "dbgOngoingAcMode": {
+                "attributes": {
+                    "adminSt": "disabled",
+                    "dn": "uni/fabric/ogmode",
+                    "mode": "path"
+                },
+                "children": []
+            }
+        }
+
+  # - name: Cisco ACI Fault Cleanup | Disable Ingress Drop Counters
+  #   cisco.aci.aci_rest:
+  #     host: "{{ apic_hostname }}"
+  #     password: "{{ apic_password }}"
+  #     username: "{{ apic_username }}"
+  #     validate_certs: false
+  #     path: /api/node/mo/{{ element }}.json
+  #     method: post
+  #     content:
+  #       {
+  #           "statsThrDoubleP": {
+  #               "attributes": {
+  #                   "dn": "{{ element }}",
+  #                   "highSevState": "Crit,Major,Minor"
+  #               }
+  #           }
+  #       }
+  #   loop_control:
+  #     loop_var: element
+  #   loop:
+  #     - "uni/infra/moninfra-default/tarinfra-l1PhysIf/stat-eqptIngrDropPkts/coll-5min/thrDouble-eqptIngrDropPktsForwardingRate"
+  #     - "uni/infra/moninfra-default/tarinfra-pcAggrIf/stat-eqptIngrDropPkts/coll-5min/thrDouble-eqptIngrDropPktsForwardingRate"
+  #     - "uni/fabric/monfab-default/tarfab-l1PhysIf/stat-eqptIngrDropPkts/coll-5min/thrDouble-eqptIngrDropPktsForwardingRate"
+  #     - "uni/tn-common/monepg-default/tarepg-l3extOut/stat-l2IngrBytesAg/coll-15min/thrDouble-l2IngrBytesAgDropRate"
+  #     - "uni/tn-common/monepg-default/tarepg-sviIf/stat-l2IngrPkts/coll-5min/thrDouble-l2IngrPktsDropRate"
+  #     - "uni/tn-common/monepg-default/tarepg-vlanCktEp/stat-l2IngrPkts/coll-5min/thrDouble-l2IngrPktsDropRate"
