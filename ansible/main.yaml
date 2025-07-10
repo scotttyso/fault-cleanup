@@ -1,0 +1,33 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+
+    - name: Fault Cleanup | Confirm the latest SDKs are installed
+      pip:
+        name:
+          - datetime
+          - distro
+          - netaddr
+          - purity_fb
+          - purestorage
+          - py-pure-client
+          - pycountry
+          - pytz
+          - urllib3
+        state: latest
+
+    - name: Fault Cleanup | Load variables from custom file
+      ansible.builtin.include_vars:
+        dir: "{{ playbook_dir }}/vars"
+    
+    - name: Fault Cleanup | Run the Task Library
+      include_tasks:
+        file: "{{ playbook_dir }}/tasks/main.yaml"
+      vars:
+        apic_password: "{{ lookup('ansible.builtin.env', 'apic_password') }}"
+        apic_hostname: "{{ item.hostname }}"
+        apic_username: "{{ item.username }}"
+      when: cisco.apics is defined
+      with_items: "{{ cisco.apics }}"

@@ -1,0 +1,19 @@
+---
+- name: Add a tenant using a JSON string
+  cisco.aci.aci_rest:
+    host: "{{ apic_hostname }}"
+    password: "{{ apic_password }}"
+    username: "{{ apic_username }}"
+    validate_certs: false
+    path: /api/node/mo/uni/fabric/ogmode.json
+    method: post
+    content:
+      {
+          "dbgOngoingAcMode": {
+              "attributes": {
+                  "dn": "uni/fabric/ogmode",
+                  "mode": "trail"
+              },
+              "children": []
+          }
+      }

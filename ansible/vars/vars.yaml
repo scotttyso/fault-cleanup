@@ -1,0 +1,5 @@
+---
+cisco:
+  apics:
+    - hostname: asgard-apic01.rich.ciscolabs.com
+      username: admin
